@@ -12,7 +12,9 @@ app.use(cors());
 
 const registerModels = async () => {
    try {
-      const collections = await mongoose.connection.db.listCollections().toArray();
+      const collections = await mongoose.connection.db
+         .listCollections()
+         .toArray();
       const collectionNames = collections.map((collection) => collection.name);
 
       collectionNames.forEach((collectionName) => {
@@ -30,21 +32,30 @@ const registerModels = async () => {
    }
 };
 
-// Conexão com o MongoDB usando o Mongoose
-mongoose
-   .connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-   })
-   .then(() => {
-      console.log("Conexão com o MongoDB estabelecida com sucesso");
-      registerModels();
-   })
-   .catch((err) => console.error("Erro ao conectar ao MongoDB:", err));
+async function connectDB() {
+   // Conexão com o MongoDB usando o Mongoose
+   try {
+      mongoose
+         .connect(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+         })
+         .then(() => {
+            console.log("Conexão com o MongoDB estabelecida com sucesso");
+            registerModels();
+         })
+         .catch((err) => console.error("Erro ao conectar ao MongoDB:", err));
+   } catch (error) {
+      console.log(error);
+      return res.status(500).json({ msg: error });
+   }
+}
 
 app.post("/:aluno", async (req, res) => {
    try {
       const aluno = req.params.aluno;
-      const collections = await mongoose.connection.db.listCollections().toArray();
+      const collections = await mongoose.connection.db
+         .listCollections()
+         .toArray();
       const collectionExists = collections.some(
          (collection) => collection.name === aluno
       );
@@ -187,6 +198,8 @@ app.delete("/:aluno", async (req, res) => {
    }
 });
 
-app.listen(Number(process.env.PORT), () => {
-   console.log(`Server up and running at port ${process.env.PORT}`);
+connectDB().then(() => {
+   app.listen(Number(process.env.PORT), () => {
+      console.log(`Server up and running at port ${process.env.PORT}`);
+   });
 });
