@@ -51,6 +51,7 @@ async function connectDB() {
 }
 
 app.post("/:aluno", async (req, res) => {
+   console.log(mongoose.connection);
    try {
       const aluno = req.params.aluno;
       const collections = await mongoose.connection.db
