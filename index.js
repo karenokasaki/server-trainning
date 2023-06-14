@@ -40,8 +40,8 @@ async function connectDB() {
             useNewUrlParser: true,
          })
          .then(() => {
-            console.log("Conexão com o MongoDB estabelecida com sucesso");
             registerModels();
+            console.log("Conexão com o MongoDB estabelecida com sucesso");
          })
          .catch((err) => console.error("Erro ao conectar ao MongoDB:", err));
    } catch (error) {
@@ -51,7 +51,6 @@ async function connectDB() {
 }
 
 app.post("/:aluno", async (req, res) => {
-   console.log(mongoose.connection);
    try {
       const aluno = req.params.aluno;
       const collections = await mongoose.connection.db
