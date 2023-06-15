@@ -35,15 +35,13 @@ const registerModels = async () => {
 async function connectDB() {
    // Conexão com o MongoDB usando o Mongoose
    try {
-      mongoose
-         .connect(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-         })
-         .then(() => {
-            registerModels();
-            console.log("Conexão com o MongoDB estabelecida com sucesso");
-         })
-         .catch((err) => console.error("Erro ao conectar ao MongoDB:", err));
+      await mongoose.connect(process.env.MONGODB_URI, {
+         useNewUrlParser: true,
+      });
+
+      await registerModels();
+
+      console.log("Conexão com o MongoDB estabelecida com sucesso");
    } catch (error) {
       console.log(error);
       return res.status(500).json({ msg: error });
