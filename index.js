@@ -22,7 +22,7 @@ const registerModels = async () => {
             // Cria um novo modelo
             mongoose.model(
                collectionName,
-               mongoose.Schema({}, { strict: false }),
+               mongoose.Schema({}, { strict: false, timestamps: true }),
                collectionName
             );
          }
@@ -71,7 +71,7 @@ app.post("/:aluno", async (req, res) => {
          // Cria um novo modelo
          AlunoModel = mongoose.model(
             aluno,
-            mongoose.Schema({}, { strict: false }),
+            mongoose.Schema({}, { strict: false, timestamps: true }),
             aluno
          );
       }
